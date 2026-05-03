@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AppLayout from "../AppLayout";
 
 const MOIS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-const COLORS = ["bg-orange-400","bg-blue-400","bg-purple-400","bg-pink-400","bg-teal-400","bg-yellow-500","bg-red-400","bg-indigo-400"];
 
 const defaultMembres = [
   { id: 1, nom: "Koffi Kouamé (Vous)", initiale: "K", color: "bg-orange-400" },

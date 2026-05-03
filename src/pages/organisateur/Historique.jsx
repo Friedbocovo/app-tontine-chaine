@@ -261,7 +261,6 @@ function EventCard({ event }) {
 // ================================
 export default function Historique() {
   const navigate = useNavigate();
-  const { id } = useParams();
   const [filtre, setFiltre] = useState("Tout");
 
   const filtered = demoHistorique.filter((e) => {

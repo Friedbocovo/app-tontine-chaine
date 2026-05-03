@@ -48,8 +48,6 @@ export default function Profil() {
   const navigate = useNavigate();
   const [biometrie, setBiometrie] = useState(true);
   const [showPinModal, setShowPinModal] = useState(false);
-  const [pin, setPin] = useState([]);
-  const [section, setSection] = useState(null);
 
   const inscription = JSON.parse(localStorage.getItem("inscription") || "{}");
   const nom = inscription.nom || demoProfile.nom;

@@ -65,7 +65,6 @@ const getScenario = (membre) => {
 // ================================
 function ModalIncident({ membre, onClose }) {
   const scenario = getScenario(membre);
-  const [action, setAction] = useState(null);
 
   const penalite10 = Math.round(membre.montantDu * 0.1);
   const penalite20 = Math.round(membre.montantDu * 0.2);
@@ -372,7 +371,6 @@ function IncidentCard({ membre, onClick }) {
 // ================================
 export default function Incidents() {
   const navigate = useNavigate();
-  const { id } = useParams();
   const [membreSelectionne, setMembreSelectionne] = useState(null);
 
   const nbRetards = demoIncidents.filter(m => m.statut === "EN_RETARD").length;

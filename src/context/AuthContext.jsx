@@ -10,7 +10,6 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [utilisateur, setUtilisateur] = useState(null);
   const [role, setRole] = useState(null); // "organisateur" | "membre"
-  const [pin, setPin] = useState(null);
   const [estConnecte, setEstConnecte] = useState(false);
   const [chargement, setChargement] = useState(true);
 
@@ -24,7 +23,6 @@ export function AuthProvider({ children }) {
       if (userData && savedRole && savedPin) {
         setUtilisateur(JSON.parse(userData));
         setRole(savedRole);
-        setPin(savedPin);
         setEstConnecte(true);
       }
     } catch (e) {
@@ -56,7 +54,6 @@ export function AuthProvider({ children }) {
   // ================================
   const sauvegarderPin = (pinCode) => {
     localStorage.setItem("tontine_pin", pinCode);
-    setPin(pinCode);
   };
 
   // ================================
@@ -112,7 +109,6 @@ export function AuthProvider({ children }) {
   const deconnecter = () => {
     setUtilisateur(null);
     setRole(null);
-    setPin(null);
     setEstConnecte(false);
 
     // On garde l'inscription et le PIN (pour reconnexion)

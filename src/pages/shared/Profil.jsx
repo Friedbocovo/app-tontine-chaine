@@ -47,7 +47,6 @@ function ScoreCircle({ score }) {
 export default function Profil() {
   const navigate = useNavigate();
   const [biometrie, setBiometrie] = useState(true);
-  const [showPinModal, setShowPinModal] = useState(false);
 
   const inscription = JSON.parse(localStorage.getItem("inscription") || "{}");
   const nom = inscription.nom || demoProfile.nom;
@@ -187,12 +186,7 @@ export default function Profil() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-700">Code PIN</p>
-            <button
-              onClick={() => setShowPinModal(true)}
-              className="text-xs text-green-700 font-bold"
-            >
-              Modifier
-            </button>
+            <span className="text-xs text-gray-500">Non modifiable</span>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-700">Biométrie</p>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AppLayout from "./AppLayout2";
 
 const demoTontine = {
@@ -35,7 +35,6 @@ const methodesPaiement = [
 
 export default function Paiement() {
   const navigate = useNavigate();
-  const { id } = useParams();
   const [methode, setMethode] = useState("mtn");
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);

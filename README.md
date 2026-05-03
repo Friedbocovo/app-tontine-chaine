@@ -1,419 +1,130 @@
 # 🔗 TontineChain
 
-> **Votre tontine, protégée et transparente**  
-> Projet développé pour le **MIABE HACKATHON 2026** — Catégorie D02 : Inclusion financière & DeFi
+> **Votre tontine, protégée et transparente**
 
+[![Polygon](https://img.shields.io/badge/Blockchain-Polygon-8247E5)](https://polygon.technology)
+[![Solidity](https://img.shields.io/badge/Smart%20Contract-Solidity%200.8.19-363636)](https://soliditylang.org)
+[![React](https://img.shields.io/badge/Frontend-React%2018-61DAFB)](https://react.dev)
+[![TailwindCSS](https://img.shields.io/badge/CSS-TailwindCSS-38BDF8)](https://tailwindcss.com)
+[![MIABE 2026](https://img.shields.io/badge/MIABE%20Hackathon-2026-1B5E4B)](https://miabehackathon.com)
 
----
-
-## 📋 Table des matières
-
-1. [À propos du projet](#-à-propos-du-projet)
-2. [Contexte et problème](#-contexte-et-problème)
-3. [Solution](#-solution)
-4. [Architecture technique](#-architecture-technique)
-5. [Fonctionnalités](#-fonctionnalités)
-6. [Smart Contract](#-smart-contract)
-7. [Installation](#-installation)
-8. [Structure du projet](#-structure-du-projet)
-9. [Variables d'environnement](#-variables-denvironnement)
-10. [Déploiement du contrat](#-déploiement-du-contrat)
-11. [Équipe](#-équipe)
-12. [Roadmap](#-roadmap)
+**Projet B-01 — Catégorie D02 : Inclusion financière & DeFi**  
+**MIABE Hackathon 2026 — DTC Darollo Technologies Corporation**
 
 ---
 
-## 🎯 À propos du projet
+## 📖 Description de la solution
 
-**TontineChain** est une application décentralisée (DApp) qui digitalise et sécurise les tontines béninoises grâce à la technologie blockchain. Elle transforme un système d'épargne informel centenaire en un protocole transparent, automatique et incorruptible.
+**TontineChain** est une application décentralisée (DApp) qui sécurise les tontines béninoises grâce à la blockchain Polygon.
 
-### ODD ciblés
-| ODD | Description |
-|-----|-------------|
-| 🎯 ODD 1 | Fin de la pauvreté |
-| 💼 ODD 8 | Travail décent et croissance économique |
-| ⚖️ ODD 10 | Inégalités réduites |
-| 🏛️ ODD 16 | Institutions efficaces et responsables |
+Au Bénin, **60 à 70% des adultes** participent à des tontines — des groupes d'épargne informels qui brassent **400 à 600 millions USD par an**. Mais **15 à 20% d'entre elles** connaissent chaque année un incident grave : organisateurs qui disparaissent avec la caisse, membres qui refusent de payer, litiges sur l'ordre de tirage — sans aucun recours légal.
 
----
+### Comment TontineChain résout ce problème
 
-## 🔍 Contexte et problème
+TontineChain encode les règles de chaque tontine dans un **smart contract Solidity** déployé sur Polygon. Une fois créées, ces règles sont **immuables et automatiquement appliquées** — personne, pas même l'organisateur, ne peut les modifier ou les contourner.
 
-### Les tontines au Bénin en chiffres
 ```
-👥  60-70%    des adultes béninois participent à au moins une tontine
-💰  400-600M  USD brassés annuellement par les tontines béninoises
-⚠️  15-20%    des tontines connaissent chaque année un incident majeur
-👩  70%       des participants sont des femmes (premières victimes)
-```
-
-### Le problème central
-Les tontines béninoises fonctionnent sur la confiance humaine, mais cette confiance seule ne suffit pas :
-
-- ❌ Un organisateur peut **disparaître avec la caisse**
-- ❌ Un membre peut **refuser de payer** sans recours
-- ❌ L'**ordre de tirage** peut être contesté
-- ❌ Les règles ne sont **nulle part contraignantes**
-- ❌ Aucune **preuve légale** en cas de litige
-
----
-
-## 💡 Solution
-
-TontineChain encode les règles de chaque tontine dans un **smart contract Solidity** déployé sur la blockchain Polygon. Une fois créées, ces règles sont **immuables** et **automatiquement appliquées** — personne, pas même l'organisateur, ne peut les modifier.
-
-### Principe fondamental
-```
-"Code is Law"
-Le smart contract EST la loi.
-Personne ne peut interférer.
-Tout est automatique et immuable.
+L'organisateur crée la tontine et définit les règles.
+Après ça → la blockchain gère TOUT automatiquement :
+  ✅ Enregistrement des cotisations
+  ✅ Libération automatique de la cagnotte
+  ✅ Pénalités en cas de retard
+  ✅ Exclusions automatiques
+  ✅ Signalement aux autorités
+  ✅ Remboursements
+  ✅ Distribution de la caisse commune
 ```
 
 ---
 
-## 🏗️ Architecture technique
+## 🛠️ Technologies utilisées
 
-| Composante | Technologie | Rôle |
-|------------|-------------|------|
-| **Smart Contract** | Solidity (Polygon PoS) | Encode et exécute toutes les règles |
-| **Blockchain** | Polygon PoS | Registre immuable — frais < 0,01 USD/tx |
-| **Frontend** | React + TailwindCSS | Interface web responsive (mobile-first) |
-| **Wallet** | MetaMask + ERC-4337 | Connexion par téléphone — pas de seed phrase |
-| **Stablecoin** | USDC / cUSD | Valeur stable équivalente FCFA |
-| **Paiement** | MTN MoMo / Moov Money | Conversion FCFA ↔ stablecoin automatique |
-| **KYC** | Oracle DTC | Vérification automatique via API |
-| **Oracle** | Chainlink (optionnel) | Conversion FCFA → stablecoin en temps réel |
-
-### Schéma d'architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│                  FRONTEND (React)                │
-│   Mobile-first + Responsive Desktop             │
-└──────────────┬──────────────────────────────────┘
-               │ Ethers.js
-┌──────────────▼──────────────────────────────────┐
-│              SMART CONTRACT (Solidity)           │
-│              Polygon PoS Blockchain              │
-│                                                  │
-│  ┌─────────────┐  ┌──────────────┐              │
-│  │   Tontines  │  │    KYC       │              │
-│  │   Rules     │  │  Blacklist   │              │
-│  └─────────────┘  └──────────────┘              │
-│  ┌─────────────┐  ┌──────────────┐              │
-│  │  Paiements  │  │  Pénalités   │              │
-│  │  Automatiq. │  │  Automatiq.  │              │
-│  └─────────────┘  └──────────────┘              │
-└─────────────────────────────────────────────────┘
-               │
-┌──────────────▼──────────────────────────────────┐
-│         MTN MoMo / Moov Money                   │
-│         Conversion FCFA ↔ MATIC                 │
-└─────────────────────────────────────────────────┘
-```
+| Couche | Technologie | Rôle |
+|--------|-------------|------|
+| **Smart Contract** | Solidity 0.8.19 | Encode et exécute toutes les règles de la tontine |
+| **Blockchain** | Polygon PoS | Registre immuable — frais < 0,01 USD par transaction |
+| **Frontend** | React 18 + TailwindCSS | Interface web responsive (mobile-first) |
+| **Connexion blockchain** | Ethers.js v6 | Communication entre React et le smart contract |
+| **Wallet** | MetaMask | Connexion et signature des transactions |
+| **Paiement** | MTN MoMo / Moov Money | Paiement en FCFA depuis l'application |
+| **Vérification identité** | KYC Oracle (DTC) | Vérification automatique des documents |
+| **Routage** | React Router DOM v6 | Navigation entre les pages |
 
 ---
 
-## ✨ Fonctionnalités
-
-### 👤 Authentification & KYC
-- [x] Inscription avec numéro de téléphone béninois (+229)
-- [x] Vérification SMS
-- [x] Code PIN à 6 chiffres + biométrie
-- [x] KYC automatique (CNI / CIP / Passeport / Biométrique)
-- [x] Selfie avec détection de visage via caméra
-- [x] Hash du document stocké on-chain (jamais le document)
-- [x] Validation automatique via oracle DTC
-
-### 🏗️ Création de tontine (Organisateur)
-- [x] Nom, montant, fréquence (hebdo/mensuel), date de début
-- [x] Nombre max de membres
-- [x] Participation optionnelle de l'organisateur
-- [x] Ordre des bénéficiaires : tirage au sort ou manuel (drag & drop)
-- [x] Code d'invitation unique généré automatiquement
-- [x] QR Code + partage SMS
-- [x] Confirmation de déploiement sur blockchain
-
-### 💰 Gestion des paiements
-- [x] Paiement via MTN MoMo / Moov Money
-- [x] Suivi en temps réel (qui a payé / en attente)
-- [x] Libération automatique de la cagnotte
-- [x] Reçu numérique avec référence blockchain
-- [x] Historique complet avec hash de transaction
-
-### ⚖️ Système de pénalités (100% automatique)
-
-**CAS 1 — Membre qui a DÉJÀ reçu sa cagnotte :**
-```
-Jour 1 → Pénalité 10% automatique → Caisse commune
-Jour 2 → Avertissement automatique
-Jour 3 → Double pénalité 20% → Caisse commune
-Jour 4 → Signalement automatique aux autorités
-         → Preuve immuable blockchain
-         → Contact officiel DTC notifié
-```
-
-**CAS 2 — Membre qui N'A PAS encore reçu :**
-```
-Jour 1 → Pénalité 10% automatique → Caisse commune
-Jour 2 → Avertissement automatique
-Jour 3 → Exclusion définitive automatique
-         → Dette enregistrée blockchain
-         → Remboursement à la fin de la tontine
-```
-
-### 🔒 Système anti-fraude
-- [x] Blacklist globale pour les membres défaillants
-- [x] Signalement automatique aux autorités (Jour 7 max)
-- [x] Remboursement partiel ou total de la dette
-- [x] Score de fiabilité calculé automatiquement
-- [x] Caisse commune distribuée à la fin
-- [x] Pénalités → Organisateur (s'il ne participe pas) ou caisse commune
-
-### 📊 Dashboard
-- [x] Dashboard Organisateur avec stats en temps réel
-- [x] Dashboard Membre avec progression du cycle
-- [x] Historique complet des transactions
-- [x] Notifications en temps réel
-- [x] Score de fiabilité (0-100%)
-- [x] Profil avec comptes Mobile Money
-
----
-
-## 📜 Smart Contract
-
-### Fichier : `TontineChain.sol`
-
-#### Fonctions principales
-
-| Fonction | Description | Accès |
-|----------|-------------|-------|
-| `createTontine()` | Créer une tontine avec règles | Public |
-| `joinTontineByCode()` | Rejoindre via code/QR/SMS | Public |
-| `payContribution()` | Payer sa cotisation | Membre |
-| `checkLatePayments()` | Vérifier les retards (auto) | Public |
-| `setBeneficiaryOrder()` | Définir l'ordre des bénéficiaires | Organisateur |
-| `submitKYC()` | Soumettre ses documents KYC | Public |
-| `repayDebt()` | Rembourser sa dette (partiel/total) | Blacklisté |
-
-#### Fonctions de lecture (React)
-
-| Fonction | Retourne |
-|----------|----------|
-| `getTontineDetails()` | Toutes les infos d'une tontine |
-| `getPaymentStatus()` | Qui a payé ce tour |
-| `getMemberInfo()` | Infos + score d'un membre |
-| `getCurrentBeneficiary()` | Bénéficiaire du tour actuel |
-| `getRoundHistory()` | Historique de tous les tours |
-| `getUserTontines()` | Tontines d'un utilisateur |
-| `getBlacklistInfo()` | Statut blacklist d'un wallet |
-
-#### Constantes du contrat
-
-```solidity
-OFFICIAL_CONTACT    = "+22997000000"  // Numéro DTC — immuable
-PENALTY_PERCENT_1   = 10              // Pénalité Jour 1
-PENALTY_PERCENT_2   = 20              // Pénalité Jour 3
-MAX_DELAY_DAYS      = 3               // Délai max avant exclusion (CAS 2)
-DAYS_BEFORE_BLACKLIST = 7             // Jours avant blacklist globale
-```
-
----
-
-## 🚀 Installation
+## ⚙️ Instructions d'installation
 
 ### Prérequis
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-- MetaMask (extension navigateur)
-- Compte Polygon Mumbai (testnet)
 
-### 1. Cloner le projet
+Avant de commencer, assurez-vous d'avoir installé :
+
+- [Node.js](https://nodejs.org) version **18 ou supérieure**
+- [npm](https://npmjs.com) version **9 ou supérieure**
+- [MetaMask](https://metamask.io) installé dans votre navigateur
+- Du MATIC de test sur le réseau **Polygon Mumbai** → [Faucet gratuit](https://faucet.polygon.technology)
+
+### Étape 1 — Cloner le projet
 
 ```bash
 git clone https://github.com/votre-equipe/tontinechain.git
 cd tontinechain
 ```
 
-### 2. Installer les dépendances frontend
+### Étape 2 — Installer les dépendances
 
 ```bash
 npm install
-npm install ethers@6.0.0
-npm install react-router-dom
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
 ```
 
-### 3. Installer les dépendances pour le contrat
-
-```bash
-npm install -D hardhat
-npm install -D @nomicfoundation/hardhat-toolbox
-npx hardhat init
-```
-
-### 4. Configurer les variables d'environnement
+### Étape 3 — Configurer les variables d'environnement
 
 ```bash
 cp .env.example .env
-# Remplir les valeurs dans .env
 ```
 
-### 5. Lancer l'application
+Ouvrez le fichier `.env` et remplissez les valeurs :
+
+```env
+# Adresse du smart contract déployé sur Polygon Mumbai
+REACT_APP_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
+
+# Réseau : mumbai (testnet) ou polygon (mainnet)
+REACT_APP_NETWORK=mumbai
+
+# Clé privée pour déployer le contrat (NE PAS PARTAGER)
+PRIVATE_KEY=votre_cle_privee_ici
+
+# API Key PolygonScan pour vérifier le contrat
+POLYGONSCAN_API_KEY=votre_api_key_ici
+```
+
+> ⚠️ **Important** : Ne commitez jamais votre fichier `.env` sur GitHub. Il est dans `.gitignore`.
+
+### Étape 4 — Lancer l'application en développement
 
 ```bash
 npm start
 ```
 
-L'application sera disponible sur `http://localhost:3000`
+L'application s'ouvre automatiquement sur **http://localhost:3000**
 
----
-
-## 📁 Structure du projet
-
-```
-tontinechain/
-├── public/
-│   └── index.html
-├── src/
-│   ├── assets/              # Images, logos, icônes
-│   ├── blockchain/
-│   │   ├── contract.js      # ABI + adresse du contrat
-│   │   ├── provider.js      # Connexion wallet + utilitaires
-│   │   └── hooks/
-│   │       ├── useTontine.js    # Hook tontines
-│   │       ├── useMember.js     # Hook membres + KYC
-│   │       └── usePayment.js    # Hook paiements
-│   ├── components/
-│   │   ├── ui/              # Composants réutilisables
-│   │   ├── layout/          # Navbar, BottomNav
-│   │   └── tontine/         # Composants métier
-│   ├── context/
-│   │   ├── AuthContext.jsx
-│   │   └── BlockchainContext.jsx
-│   ├── pages/
-│   │   ├── SplashScreen.jsx
-│   │   ├── Onboarding.jsx
-│   │   ├── AppLayout.jsx        # Layout universel mobile/desktop
-│   │   ├── auth/
-│   │   │   ├── ChoixRole.jsx
-│   │   │   ├── Inscription.jsx
-│   │   │   ├── Verification.jsx
-│   │   │   ├── CodePin.jsx
-│   │   │   ├── KYC.jsx
-│   │   │   └── Connexion.jsx
-│   │   ├── organisateur/
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── GestionTontine.jsx
-│   │   │   ├── Incidents.jsx
-│   │   │   ├── Historique.jsx
-│   │   │   └── creation/
-│   │   │       ├── Etape1Regles.jsx
-│   │   │       ├── Etape2Membres.jsx
-│   │   │       ├── Etape3Ordre.jsx
-│   │   │       └── Confirmation.jsx
-│   │   ├── membre/
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Rejoindre.jsx
-│   │   │   ├── Paiement.jsx
-│   │   │   ├── ConfirmationPaiement.jsx
-│   │   │   ├── SuiviTour.jsx
-│   │   │   └── Historique.jsx
-│   │   └── shared/
-│   │       ├── Profil.jsx
-│   │       └── Notifications.jsx
-│   ├── utils/
-│   │   ├── formatCFA.js
-│   │   ├── formatDate.js
-│   │   └── reliabilityScore.js
-│   └── App.jsx
-├── contracts/
-│   └── TontineChain.sol     # Smart contract principal
-├── scripts/
-│   └── deploy.js            # Script de déploiement
-├── test/
-│   └── TontineChain.test.js
-├── hardhat.config.js
-├── tailwind.config.js
-├── .env.example
-└── README.md
-```
-
----
-
-## 🔐 Variables d'environnement
-
-Créez un fichier `.env` à la racine du projet :
-
-```env
-# Réseau blockchain
-REACT_APP_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
-REACT_APP_NETWORK=mumbai
-
-# Hardhat / Déploiement
-PRIVATE_KEY=votre_cle_privee_ici
-POLYGONSCAN_API_KEY=votre_api_key_polygonscan
-MUMBAI_RPC_URL=https://rpc-mumbai.maticvigil.com
-
-# Oracle DTC (KYC)
-REACT_APP_DTC_ORACLE_ADDRESS=0x0000000000000000000000000000000000000000
-
-# Optionnel
-REACT_APP_INFURA_KEY=votre_infura_key
-```
-
-⚠️ **Ne jamais committer le fichier `.env` avec votre clé privée !**
-
----
-
-## 🛠️ Déploiement du contrat
-
-### Configuration Hardhat
-
-```javascript
-// hardhat.config.js
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
-
-module.exports = {
-  solidity: "0.8.19",
-  networks: {
-    mumbai: {
-      url: process.env.MUMBAI_RPC_URL,
-      accounts: [process.env.PRIVATE_KEY],
-    },
-    polygon: {
-      url: "https://polygon-rpc.com",
-      accounts: [process.env.PRIVATE_KEY],
-    },
-  },
-};
-```
-
-### Script de déploiement
+### Étape 5 (Optionnel) — Déployer le smart contract
 
 ```bash
+# Installer Hardhat
+npm install -D hardhat @nomicfoundation/hardhat-toolbox
+
 # Compiler le contrat
 npx hardhat compile
 
-# Déployer sur Mumbai (testnet)
+# Déployer sur Polygon Mumbai (testnet)
 npx hardhat run scripts/deploy.js --network mumbai
 
 # Vérifier sur PolygonScan
 npx hardhat verify --network mumbai ADRESSE_DU_CONTRAT
 ```
 
-### Obtenir des MATIC de test
-
-```
-Faucet Mumbai : https://faucet.polygon.technology/
-```
-
-### Après le déploiement
-
-Mettez à jour l'adresse du contrat dans `src/blockchain/contract.js` :
+Après le déploiement, copiez l'adresse du contrat dans `src/blockchain/contract.js` :
 
 ```javascript
 export const CONTRACT_ADDRESS = "0xVOTRE_ADRESSE_ICI";
@@ -421,85 +132,187 @@ export const CONTRACT_ADDRESS = "0xVOTRE_ADRESSE_ICI";
 
 ---
 
-## 🗺️ Roadmap
+## 🚀 Instructions d'utilisation
 
-### Phase 1 — Présélection ✅
-- [x] Documentation du fonctionnement des tontines
-- [x] Maquettes visuelles complètes (28 écrans)
-- [x] Description de la composante blockchain
-- [x] Site web vitrine
+### En tant qu'Organisateur
 
-### Phase 2 — Demi-finale 🚧 (En cours)
-- [x] Smart contract Solidity complet
-- [x] Frontend React (28 pages)
-- [x] Système de pénalités automatiques
-- [x] KYC avec caméra
-- [x] Système blacklist + remboursement
-- [x] Hooks blockchain (useTontine, useMember, usePayment)
-- [ ] Déploiement sur Polygon Mumbai
-- [ ] Connexion frontend ↔ blockchain complète
-- [ ] Tests du smart contract
-- [ ] Démo live avec incidents simulés
-
-### Phase 3 — Finale 🔮
-- [ ] MVP complet fonctionnel
-- [ ] Intégration MTN MoMo / Moov Money réelle
-- [ ] Oracle Chainlink pour conversion FCFA
-- [ ] Account Abstraction (ERC-4337)
-- [ ] Gestion dissolution anticipée
-- [ ] Super Admin dashboard
-- [ ] Tests de sécurité (audit)
-- [ ] Pitch 10 minutes
-
----
-
-## 👥 Équipe
-
-| Membre | Rôle |
-|--------|------|
-| **[Membre 1]** | Frontend Lead + Blockchain |
-| **[Membre 2]** | Frontend Developer |
-| **[Membre 3]** | Frontend Developer |
-| **[Membre 4]** | Documentation + Pitch |
-
----
-
-## 📊 Impact attendu
-
+**1. Créer un compte**
 ```
-Sur les 400-600M USD de tontines béninoises :
+Ouvrir l'app → Commencer → Organisateur
+→ Entrer nom + téléphone + ville
+→ Vérifier par SMS
+→ Créer un code PIN à 6 chiffres
+→ Passer le KYC (photo de document + selfie)
+```
 
-✅ Élimination des détournements
-✅ Réduction des incidents de 60%+ (référence Afrique de l'Est)
-✅ Augmentation de l'épargne de 35%+
-✅ Construction d'un historique d'épargne vérifiable
-✅ Accès facilité au crédit formel
-✅ Protection renforcée des 70% de participantes femmes
+**2. Créer une tontine**
+```
+Dashboard → Bouton + (créer)
+→ Étape 1 : Définir les règles
+  - Nom de la tontine
+  - Montant de cotisation (FCFA)
+  - Fréquence (hebdomadaire ou mensuelle)
+  - Date de début + Nombre max de membres
+  - Je participe ou non ?
+
+→ Étape 2 : Ajouter les membres
+  - Par numéro de téléphone
+  - Par SMS (lien d'invitation)
+
+→ Étape 3 : Ordre des bénéficiaires
+  - Tirage au sort automatique
+  - OU ordre manuel (glisser-déposer)
+
+→ Confirmation → Smart contract déployé !
+```
+
+**3. Partager le code d'invitation**
+```
+Copier le code → Partager le lien → QR Code
+Les membres rejoignent avec ce code
+```
+
+**4. Suivre la tontine**
+```
+Dashboard → Gérer → Voir qui a payé en temps réel
+Les pénalités et exclusions sont gérées automatiquement
 ```
 
 ---
 
-## 🏆 Hackathon
+### En tant que Membre
 
-**MIABE HACKATHON 2026**  
-Organisé par **DTC — Darollo Technologies Corporation**  
-Thème : *La Blockchain, levier du développement durable africain*  
-Catégorie : **D02 — Inclusion financière & DeFi**  
-Projet : **B-01 TontineChain**
+**1. Créer un compte** *(même procédure que l'organisateur)*
+
+**2. Rejoindre une tontine**
+```
+Dashboard → + → Rejoindre une tontine
+→ Entrer le code d'invitation OU Scanner le QR code
+→ Vérifier les détails
+→ Confirmer
+```
+
+**3. Payer sa cotisation**
+```
+Dashboard → Payer maintenant
+→ Choisir MTN MoMo ou Moov Money
+→ Confirmer le paiement
+→ Reçu avec référence blockchain généré
+```
+
+**4. Suivre son tour**
+```
+Ma Tontine → Suivi du tour
+→ Voir qui a payé / en attente
+→ Voir la cagnotte actuelle
+→ Voir quand vous recevrez votre cagnotte
+```
 
 ---
 
-## 📄 Licence
+## ✨ Fonctionnalités principales développées
 
-Ce projet est développé dans le cadre du MIABE Hackathon 2026.  
-Tous droits réservés © 2026 TontineChain Team.
+### 🔐 Authentification & Identité
+- Inscription avec numéro de téléphone béninois (+229)
+- Vérification par SMS en temps réel
+- Code PIN à 6 chiffres + authentification biométrique
+- **KYC automatique** : photo du document (CNI/CIP/Passeport) + selfie avec détection de visage via caméra
+- Hash cryptographique du document stocké on-chain (le document n'est jamais stocké)
+- Validation automatique via oracle DTC officiel
+
+### 🏦 Création et gestion de tontine
+- Création de tontine avec règles entièrement personnalisables
+- Deux méthodes d'ordre des bénéficiaires : **tirage au sort** ou **ordre manuel** (drag & drop)
+- Invitation des membres par **numéro de téléphone**, **code unique** ou **QR code**
+- Participation optionnelle de l'organisateur (s'il participe, toutes les règles membres lui s'appliquent)
+- Code d'invitation unique généré et stocké sur la blockchain
+- Aperçu des détails de la tontine avant de rejoindre
+
+### 💳 Paiements et cotisations
+- Paiement via **MTN Mobile Money** ou **Moov Money**
+- Confirmation de paiement avec **référence blockchain** (hash de transaction)
+- Reçu numérique téléchargeable
+- Suivi en temps réel de qui a payé pour le tour en cours
+- **Libération automatique** de la cagnotte dès que tous les membres ont cotisé
+
+### ⚖️ Système de pénalités 100% automatique
+Deux cas de figure gérés automatiquement par le smart contract :
+
+**CAS 1 — Membre ayant déjà reçu sa cagnotte**
+| Jour | Action automatique |
+|------|--------------------|
+| Jour 1 | Pénalité 10% du montant de cotisation |
+| Jour 2 | Avertissement automatique |
+| Jour 3 | Double pénalité 20% |
+| Jour 4+ | Signalement aux autorités + preuve blockchain immuable |
+
+**CAS 2 — Membre n'ayant pas encore reçu**
+| Jour | Action automatique |
+|------|--------------------|
+| Jour 1 | Pénalité 10% du montant de cotisation |
+| Jour 2 | Avertissement automatique |
+| Jour 3 | Exclusion définitive + dette enregistrée blockchain |
+
+### 🚫 Système anti-fraude et blacklist
+- **Blacklist globale** : un membre exclu ne peut plus rejoindre aucune tontine TontineChain
+- **Remboursement** partiel ou total de la dette pour lever la blacklist
+- Distribution automatique aux créanciers proportionnellement
+- **Signalement aux autorités** avec preuve immuable sur la blockchain
+- Numéro officiel DTC codé dans le contrat (immuable, ne peut pas être falsifié)
+
+### 📊 Transparence et suivi
+- Dashboard organisateur avec progression de chaque tontine
+- Dashboard membre avec compte à rebours jusqu'à son tour
+- **Score de fiabilité** calculé automatiquement (0-100%) basé sur les pénalités
+- Historique complet de toutes les transactions avec hash blockchain
+- Notifications en temps réel (paiements, décaissements, rappels, incidents)
+- Journal d'activités horodaté et filtrable
+
+### 🖥️ Interface responsive
+- Design **mobile-first** fidèle aux maquettes
+- Adaptation **desktop** avec sidebar de navigation
+- Compatible avec tous les navigateurs modernes
+- Thème vert (#1B5E4B) et orange (#F5A623) inspiré de l'identité visuelle TontineChain
 
 ---
 
-<div align="center">
+## 📁 Structure du projet
 
-**Construit avec ❤️ pour le Bénin**
+```
+tontinechain/
+├── src/
+│   ├── blockchain/
+│   │   ├── contract.js          # ABI + adresse du contrat
+│   │   ├── provider.js          # Connexion MetaMask + utilitaires
+│   │   └── hooks/
+│   │       ├── useTontine.js    # Créer, rejoindre, gérer les tontines
+│   │       ├── useMember.js     # KYC, blacklist, score de fiabilité
+│   │       └── usePayment.js    # Payer, rembourser, écouter les événements
+│   ├── pages/
+│   │   ├── auth/                # Inscription, Vérification, PIN, KYC, Connexion
+│   │   ├── organisateur/        # Dashboard, Création (3 étapes), Gestion, Incidents
+│   │   ├── membre/              # Dashboard, Rejoindre, Paiement, Suivi, Historique
+│   │   └── shared/              # Profil, Notifications
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   └── BlockchainContext.jsx
+│   └── App.jsx
+├── contracts/
+│   └── TontineChain.sol         # Smart contract principal (1265 lignes)
+├── scripts/
+│   └── deploy.js
+├── .env.example
+└── README.md
+```
 
-*"Le tisserand ne fait qu'un avec son pagne."*
+---
 
-</div>
+## 🌍 Impact attendu
+
+| Indicateur | Objectif |
+|------------|----------|
+| Incidents de fraude | Réduction de **60%+** (référence projets Afrique de l'Est) |
+| Épargne collective | Augmentation de **35%+** |
+| Accès au crédit formel | Historique d'épargne vérifiable sur blockchain |
+| Protection des femmes | 70% des participantes directement protégées |
+| Transparence | 100% des transactions vérifiables publiquement |

@@ -1,162 +1,78 @@
-// ================================
-// AuthContext.jsx
-// Contexte d'authentification global
-// ================================
-
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [utilisateur, setUtilisateur] = useState(null);
-  const [role, setRole] = useState(null); // "organisateur" | "membre"
-  const [estConnecte, setEstConnecte] = useState(false);
-  const [chargement, setChargement] = useState(true);
+  const [user, setUser] = useState(() => {
+    // Récupérer l'utilisateur depuis localStorage au chargement
+    const saved = localStorage.getItem("inscription");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  // Charger l'état depuis localStorage au démarrage
-  useEffect(() => {
-    try {
-      const userData = localStorage.getItem("tontine_user");
-      const savedRole = localStorage.getItem("tontine_role");
-      const savedPin = localStorage.getItem("tontine_pin");
-
-      if (userData && savedRole && savedPin) {
-        setUtilisateur(JSON.parse(userData));
-        setRole(savedRole);
-        setEstConnecte(true);
-      }
-    } catch (e) {
-      console.error("Erreur lecture localStorage:", e);
-    } finally {
-      setChargement(false);
-    }
-  }, []);
-
-  // ================================
-  // INSCRIPTION
-  // ================================
-  const inscrire = ({ prenom, nom, telephone, ville, role: r }) => {
-    const nouvelUtilisateur = {
-      prenom,
-      nom,
-      telephone,
-      ville,
-      dateInscription: new Date().toISOString(),
-      kycStatut: "en_attente", // "en_attente" | "approuve" | "rejete"
-      estBlackliste: false,
-    };
-    localStorage.setItem("tontine_inscription", JSON.stringify(nouvelUtilisateur));
-    localStorage.setItem("tontine_role", r);
-  };
-
-  // ================================
-  // SAUVEGARDER LE PIN
-  // ================================
-  const sauvegarderPin = (pinCode) => {
-    localStorage.setItem("tontine_pin", pinCode);
-    setPin(pinCode);
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!localStorage.getItem("pin");
+  });
 
   // ================================
   // CONNEXION
   // ================================
-  const connecter = (telephone, pinCode) => {
-    const savedPin = localStorage.getItem("tontine_pin");
-    const savedRole = localStorage.getItem("tontine_role");
-    const savedUser =
-      localStorage.getItem("tontine_user") ||
-      localStorage.getItem("tontine_inscription");
+  const login = (telephone, pinCode) => {
+    const savedPin = localStorage.getItem("pin");
+    const savedUser = JSON.parse(localStorage.getItem("inscription") || "{}");
 
-    if (pinCode !== savedPin) {
-      return { succes: false, erreur: "Code PIN incorrect" };
+    if (pinCode === savedPin) {
+      setUser(savedUser);
+      setIsAuthenticated(true);
+      return { success: true, role: savedUser.role || "membre" };
     }
-
-    let userData;
-    try {
-      userData = JSON.parse(savedUser);
-    } catch {
-      return { succes: false, erreur: "Utilisateur introuvable" };
-    }
-
-    // Mettre à jour le localStorage avec la clé finale
-    localStorage.setItem("tontine_user", JSON.stringify(userData));
-
-    setUtilisateur(userData);
-    setRole(savedRole);
-    setEstConnecte(true);
-
-    return { succes: true };
-  };
-
-  // ================================
-  // METTRE À JOUR LE PROFIL
-  // ================================
-  const mettreAJourProfil = (data) => {
-    const mis = { ...utilisateur, ...data };
-    setUtilisateur(mis);
-    localStorage.setItem("tontine_user", JSON.stringify(mis));
-  };
-
-  // ================================
-  // METTRE À JOUR LE STATUT KYC
-  // ================================
-  const mettreAJourKYC = (statut) => {
-    mettreAJourProfil({ kycStatut: statut });
+    return { success: false, error: "Numéro ou code PIN incorrect" };
   };
 
   // ================================
   // DÉCONNEXION
   // ================================
-  const deconnecter = () => {
-    setUtilisateur(null);
-    setRole(null);
-    setPin(null);
-    setEstConnecte(false);
-
-    // On garde l'inscription et le PIN (pour reconnexion)
-    // On supprime juste la session active
-    localStorage.removeItem("tontine_user");
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem("pin");
+    localStorage.removeItem("inscription");
+    localStorage.removeItem("kycStatus");
+    localStorage.removeItem("walletAddress");
   };
 
   // ================================
-  // NOM COMPLET
+  // INSCRIPTION
   // ================================
-  const nomComplet = utilisateur
-    ? `${utilisateur.prenom} ${utilisateur.nom}`
-    : "";
+  const register = (userData) => {
+    const newUser = { ...userData };
+    localStorage.setItem("inscription", JSON.stringify(newUser));
+    setUser(newUser);
+    return { success: true };
+  };
 
   // ================================
-  // INITIALES (pour l'avatar)
+  // SAUVEGARDER LE PIN
   // ================================
-  const initiales = utilisateur
-    ? `${utilisateur.prenom?.[0] ?? ""}${utilisateur.nom?.[0] ?? ""}`.toUpperCase()
-    : "?";
+  const savePin = (pinCode) => {
+    localStorage.setItem("pin", pinCode);
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        utilisateur,
-        role,
-        estConnecte,
-        chargement,
-        nomComplet,
-        initiales,
-        inscrire,
-        sauvegarderPin,
-        connecter,
-        mettreAJourProfil,
-        mettreAJourKYC,
-        deconnecter,
-        estOrganisateur: role === "organisateur",
-        estMembre: role === "membre",
+        user,
+        isAuthenticated,
+        login,
+        logout,
+        register,
+        savePin,
       }}
     >
-      {!chargement && children}
+      {children}
     </AuthContext.Provider>
   );
 }
 
-// Hook d'accès facile
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth doit être utilisé dans AuthProvider");

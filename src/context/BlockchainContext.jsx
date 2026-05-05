@@ -11,6 +11,7 @@ const BlockchainContext = createContext(null);
 
 export function BlockchainProvider({ children }) {
   const membre = useMember();
+  const [reseau, setReseau] = useState(null);
   const [mauvaisReseau, setMauvaisReseau] = useState(false);
 
   // Écouter les changements de compte et de réseau
@@ -30,12 +31,13 @@ export function BlockchainProvider({ children }) {
     });
 
     return () => removeListeners();
-  }, [membre]);
+  }, []);
 
   return (
     <BlockchainContext.Provider
       value={{
         ...membre,
+        reseau,
         mauvaisReseau,
       }}
     >

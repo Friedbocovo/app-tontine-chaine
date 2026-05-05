@@ -54,6 +54,7 @@ export function AuthProvider({ children }) {
   // ================================
   const sauvegarderPin = (pinCode) => {
     localStorage.setItem("tontine_pin", pinCode);
+    setPin(pinCode);
   };
 
   // ================================
@@ -109,6 +110,7 @@ export function AuthProvider({ children }) {
   const deconnecter = () => {
     setUtilisateur(null);
     setRole(null);
+    setPin(null);
     setEstConnecte(false);
 
     // On garde l'inscription et le PIN (pour reconnexion)

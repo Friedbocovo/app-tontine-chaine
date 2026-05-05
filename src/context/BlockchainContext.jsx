@@ -1,9 +1,4 @@
-// ================================
-// BlockchainContext.jsx
-// Context global pour la blockchain
-// ================================
-
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useMember } from "../blockchain/hooks/useMember";
 import { onAccountsChanged, onChainChanged, removeListeners } from "../blockchain/provider";
 
@@ -11,33 +6,37 @@ const BlockchainContext = createContext(null);
 
 export function BlockchainProvider({ children }) {
   const membre = useMember();
-  const [reseau, setReseau] = useState(null);
   const [mauvaisReseau, setMauvaisReseau] = useState(false);
 
-  // Écouter les changements de compte et de réseau
+  // ✅ useRef pour avoir accès à membre dans useEffect
+  // sans l'ajouter comme dépendance (évite la boucle infinie)
+  const membreRef = useRef(membre);
+  useEffect(() => {
+    membreRef.current = membre;
+  }, [membre]);
+
   useEffect(() => {
     onAccountsChanged((accounts) => {
       if (accounts.length === 0) {
-        membre.deconnecter();
+        membreRef.current.deconnecter();
       } else {
-        membre.chargerInfosMembre(accounts[0]);
+        membreRef.current.chargerInfosMembre(accounts[0]);
       }
     });
 
     onChainChanged((chainId) => {
-      // Polygon Mumbai = 0x13881
+      // Polygon Mumbai = 0x13881 | Polygon Mainnet = 0x89
       setMauvaisReseau(chainId !== "0x13881" && chainId !== "0x89");
       window.location.reload();
     });
 
     return () => removeListeners();
-  }, []);
+  }, []); // ✅ tableau vide — useRef évite le warning exhaustive-deps
 
   return (
     <BlockchainContext.Provider
       value={{
         ...membre,
-        reseau,
         mauvaisReseau,
       }}
     >

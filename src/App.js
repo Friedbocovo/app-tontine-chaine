@@ -28,6 +28,18 @@ import Profil from "./pages/shared/Profil";
 import Profil2 from "./pages/membre/Profil2";
 import Notifications from "./pages/shared/Notifications";
 
+
+// Import des pages superadmin    
+import AppLayoutAdmin from "./pages/superadmin/AppLayoutAdmin";
+import DashboardAdmin from "./pages/superadmin/Dashboard";
+import ValidationKYC from "./pages/superadmin/ValidationKYC";
+import GestionUtilisateurs from "./pages/superadmin/GestionUtilisateurs";
+import GestionBlacklist from "./pages/superadmin/GestionBlacklist";
+import GestionIncidents from "./pages/superadmin/GestionIncidents";
+import LoginAdmin  from "./pages/superadmin/LoginAdmin";
+import AdminRoute  from "./pages/superadmin/AdminRoute";
+import ProfilAdmin from "./pages/superadmin/ProfilAdmin";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -59,6 +71,29 @@ export default function App() {
             <Route path="/membre/profil2" element={<Profil2 />} />
             <Route path="/profil" element={<Profil />} />
             <Route path="/notifications" element={<Notifications />} />
+
+
+          {/* Login Super Admin — accessible sans être connecté */}
+<Route path="/admin/login" element={<LoginAdmin />} />
+
+{/* Routes protégées — redirige vers /admin/login si non connecté */}
+<Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <AppLayoutAdmin />
+    </AdminRoute>
+  }
+>
+  <Route index element={<DashboardAdmin />} />
+  <Route path="kyc" element={<ValidationKYC />} />
+  <Route path="utilisateurs" element={<GestionUtilisateurs />} />
+  <Route path="blacklist" element={<GestionBlacklist />} />
+  <Route path="incidents" element={<GestionIncidents />} />
+  <Route path="profil" element={<ProfilAdmin />} />
+</Route>  
+
+
           </Routes>
         </AuthProvider>
       </BlockchainProvider>
